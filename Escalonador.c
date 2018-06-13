@@ -9,6 +9,7 @@ typedef struct processo{
 	int entrada;	
 	int duracao;
 	int prioridade;
+	int tempoRemanescente;
 }Processo;
 
 struct escalonador{
@@ -109,22 +110,24 @@ void executarFCFS(Escalonador* e){
 /*Executar a estatégia de escolanomento - Round Robin*/
 void executarRoundRobin(Escalonador* e) {
 	
-	/*
-	1 - Setar variáveis
-	2 - Importar processos em uma fila
-	3 - Executar escalonador
-		3.1 - Verificar tempo quantum
-		3.2 - Decrescer duracao do atual processo do tempo quantum
-		3.3 - Deslocar processo para o final da fila
-		3.4 - Verificar se ainda existem processos na fila
-		3.5 - Executar o proximo processo ou terminar
-	4 - Imprimir tempo medio de espera e de execução
-	5 - Gravar Log
-	*/
+/*
+1 - Setar variáveis
+2 - Importar processos em uma fila
+3 - Executar escalonador
+	3.1 - Verificar tempo quantum
+	3.2 - Decrescer duracao do atual processo do tempo quantum
+	3.3 - Deslocar processo para o final da fila
+	3.4 - Verificar se ainda existem processos na fila
+	3.5 - Executar o proximo processo ou terminar
+4 - Imprimir tempo medio de espera e de execução
+5 - Gravar Log
+*/
 	
 	printf("\nExecutando Round Robin\n");
 	int i;
 	int clock = 0;
+	int TFa, TFb, TFc; //Tempo em que o processo foi finalizado
+	float tEsperaA,tEsperaB,tEsperaC;
 	float tMedioEspera = 0;
 	float tMedioExec = 0;
 	
@@ -133,12 +136,87 @@ void executarRoundRobin(Escalonador* e) {
 	for(i = 0; i < e->totalProcessos; i++){
 		insere(filaProcessos, e->processos[i].pid);
 	}
-	imprime(filaProcessos);
 	
 	vazia(filaProcessos) ? printf("Fila vazia") : printf("Processos na fila:\n");
+	imprime(filaProcessos);
 	
-	system("PAUSE");
-}
+	for(i=0; i < e->totalProcessos; i++){
+ 	 e->processos[i].tempoRemanescente = e->processos[i].duracao;
+	}
+							
+	do{
+		
+		//Caso a entrada do processo A for menor que B e C
+		
+		if(e->processos[0].tempoRemanescente > 0){
+		
+		if(e->processos[0].entrada < e->processos[1].entrada && e->processos[0].entrada < e->processos[2].entrada){
+			
+			e->processos[0].tempoRemanescente -= e->tq;
+						
+				if(e->processos[0].tempoRemanescente < 0){
+					clock += e->processos[0].tempoRemanescente + e->tq;
+					e->processos[0].tempoRemanescente = 0;
+					TFa = clock;
+				}
+				else{
+					clock += e->tq;
+					TFa += e->tq;
+				}
+			}
+			printf("Tempo remanescente em A %d\n", e->processos[0].tempoRemanescente);			
+			system("PAUSE");
+		}
+			// Caso a entrada de B seja menor que C
+			if(e->processos[1].tempoRemanescente > 0 ){		
+				if(e->processos[1].entrada<e->processos[2].entrada){
+				
+				e->processos[1].tempoRemanescente -= e->tq;
+						
+					if(e->processos[1].tempoRemanescente < 0){
+						clock += e->processos[1].tempoRemanescente + e->tq;
+						e->processos[1].tempoRemanescente = 0;
+						TFb = clock + e->processos[1].entrada;
+					}
+					else{
+						clock += e->tq;
+					}
+				}
+			printf("Tempo remanescente em B %d\n", e->processos[1].tempoRemanescente);
+			system("PAUSE");
+			}
+			if(e->processos[2].tempoRemanescente > 0){
+			
+				e->processos[2].tempoRemanescente -= e->tq;
+						
+				if(e->processos[2].tempoRemanescente < 0){
+					clock += e->processos[2].tempoRemanescente + e->tq;
+					e->processos[2].tempoRemanescente = 0;
+					TFc = clock + e->processos[2].entrada;
+				}
+				else{
+					clock += e->tq;
+				}
+			printf("Tempo remanescente em C %d\n", e->processos[2].tempoRemanescente);
+			system("PAUSE");
+			}
+		
+		tEsperaA = TFa - e->processos[0].entrada - e->processos[0].duracao;
+		tEsperaB = TFa - e->processos[1].entrada - e->processos[1].duracao;
+		tEsperaC = TFa - e->processos[2].entrada - e->processos[2].duracao;
+		
+		tMedioEspera = (tEsperaA+tEsperaB+tEsperaC) / e->totalProcessos;
+		
+				
+	}while(e->processos[0].tempoRemanescente > 0 || e->processos[1].tempoRemanescente > 0 || e->processos[2].tempoRemanescente > 0);
+
+		printf("\n\nClock: %d\n", clock);
+		printf("TFa: %d  TFb: %d  TFc: %d\n", TFa, TFb, TFc);
+		printf("\nTempo medio de espera: %f\n", tMedioEspera);		
+		gravarLog("Round Robin",tMedioExec,tMedioEspera);	
+		system("PAUSE");
+	
+} // FIM Round Robin
 
 /*Carregar em memória todos os processo lidos do arquivo - para serem escalonados*/
 Escalonador* carregarProcessos(){
@@ -154,7 +232,7 @@ Escalonador* carregarProcessos(){
 		return NULL;
 	}
 	
-	e->tq = 2;
+	e->tq = 3;
 	e->fet = 1;
 	e->trace = 0; //false
 	e->delay = 0; //false
@@ -180,4 +258,3 @@ Escalonador* carregarProcessos(){
 	
 	return e;
 }
-

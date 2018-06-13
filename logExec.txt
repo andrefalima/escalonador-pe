@@ -1,0 +1,5 @@
+Sun Jun 10 00:03:03 2018 - Estrategia: Round Robin - Tempo Medio Execucao: 0.000000 - Tempo Medio Espera: 4.333333
+Wed Jun 13 14:05:20 2018 - Estrategia: Round Robin - Tempo Medio Execucao: 0.000000 - Tempo Medio Espera: 4.333333
+Wed Jun 13 14:14:32 2018 - Estrategia: Round Robin - Tempo Medio Execucao: 0.000000 - Tempo Medio Espera: 4.333333
+Wed Jun 13 14:26:21 2018 - Estrategia: Round Robin - Tempo Medio Execucao: 0.000000 - Tempo Medio Espera: 6.333333
+Wed Jun 13 14:26:58 2018 - Estrategia: Round Robin - Tempo Medio Execucao: 0.000000 - Tempo Medio Espera: 4.333333
