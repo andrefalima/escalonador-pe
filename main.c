@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
 				break;
 			}
 			case 4:{
-				printf("Fazer");
+				executarRoundRobin(e);
 				break;
 			}			
 			case 5:{
@@ -58,8 +58,11 @@ int main(int argc, char *argv[]) {
 			case 9:	{				
 				break;
 			}
-			
-		}		
+			default: {
+				return 0;
+			}
+				
+		}
 		
 	}while(opcao!=9);
 			

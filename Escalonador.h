@@ -23,7 +23,7 @@ void setarConfiguracoes(Escalonador* e);
 
 /* 
 <<Nome>>: executarFCFC 
-<<Objetivo>>: Executar as estratégia de escalonamento FCFC (Fisrt Come First Served)			  
+<<Objetivo>>: Executar as estratégia de escalonamento FCFC (First Come First Served)			  
 <<Entrada>> : Struct Escalonador com todos os dados dos processos a serem escalonados e as configurações do 
 			  escalonamento
 <<Saída>>   : tempo médio de execução, tempo médio de espera e gravação no arquivo de logs
@@ -32,11 +32,13 @@ void executarFCFS(Escalonador* e);
 
 /* 
 <<Nome>>: executarRoundRobin 
-<<Objetivo>>: ????			  
-<<Entrada>> : ????
-<<Saída>>   : ????
+<<Objetivo>>: Executar as estratégias de escalonamento Round Robin			  
+<<Entrada>> : Struct Escalonador com todos os dados dos processos a serem escalonados e as configurações do 
+			  escalonamento
+<<Saída>>   : tempo médio de execução, tempo médio de espera e gravação no arquivo de logs
 */
 void executarRoundRobin(Escalonador * e);
+
 /* 
 <<Nome>>: executarSJF 
 <<Objetivo>>: ????			  
